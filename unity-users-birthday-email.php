@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
+define('UNITY_PATH', plugin_dir_path(__FILE__));
+
 
 class Unity_Birthday {
 
@@ -25,13 +27,42 @@ class Unity_Birthday {
 
     protected function __construct() {
         add_action( 'plugins_loaded', [$this, 'unity_load_textdomain'] );
+        add_action( 'admin_menu', [$this, 'unity_sub_menu_page'] );
+        add_action( 'admin_init', [$this, 'unity_settings_options'] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'unity_admin_scripts' ] );
         add_action( 'wp', [$this, 'event_trigger_schedule'] );
-        add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
+        add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
+        // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
+
+
+
+        // add_action( 'init', [$this, 'unity_mail_function'] );
+    }
+
+
+    public function unity_admin_scripts($hook) {
+        if( "users_page_unity-users-birthday-emails" != $hook ) {
+            return;
+        }
+        wp_enqueue_style( 'unity-admin-style', plugin_dir_url(__FILE__) . 'assets/css/admin-style.css', [], '1.0.0' );
     }
 
 
     public function unity_load_textdomain() {
         load_plugin_textdomain( 'unity-birthday-email', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+    }
+
+    public function unity_sub_menu_page() {
+        require_once( UNITY_PATH . '/inc/unity-settings.php' );
+    }
+
+    public function unity_settings_options() {
+        require_once( UNITY_PATH . '/inc/unity-settings-options.php' );
+    }
+
+    public function plugin_action_links($actions){
+        $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">Settings</a>';
+        return $actions;
     }
 
     public function event_trigger_schedule() {
@@ -93,7 +124,7 @@ class Unity_Birthday {
                             <title>Happy Birthday</title>
                             </head>
                             <body>
-                            <p><img src="https://brusselswomens.club//wp-content/uploads/2022/02/BWCBday.jpeg" alt="Happy Birthday"></p>
+                            <p><img src="https://brusselswomens.club/wp-content/uploads/2022/02/BWCBday.jpeg" alt="Happy Birthday"></p>
                             </body>
                             </html>
                             ';
