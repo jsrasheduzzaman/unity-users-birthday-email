@@ -29,13 +29,16 @@ class Unity_Birthday {
         add_action( 'plugins_loaded', [$this, 'unity_load_textdomain'] );
         add_action( 'admin_menu', [$this, 'unity_sub_menu_page'] );
         add_action( 'admin_init', [$this, 'unity_settings_options'] );
+        add_action( 'show_user_profile', [$this, 'unity_user_birthday_input'] );
+        add_action( 'edit_user_profile', [$this, 'unity_user_birthday_input'] );
+        add_action( 'personal_options_update', [$this, 'uniry_user_profile_update'] );
+        add_action( 'edit_user_profile_update', [$this, 'uniry_user_profile_update'] );
         add_action( 'admin_enqueue_scripts', [ $this, 'unity_admin_scripts' ] );
         add_action( 'wp', [$this, 'event_trigger_schedule'] );
         add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
+
+
         // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
-
-
-
         // add_action( 'init', [$this, 'unity_mail_function'] );
     }
 
@@ -61,8 +64,18 @@ class Unity_Birthday {
     }
 
     public function plugin_action_links($actions){
-        $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">Settings</a>';
+        $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">' . __('Settings', 'unity-birthday-email') . '</a>';
         return $actions;
+    }
+
+    public function unity_user_birthday_input($user) {
+        require_once( UNITY_PATH . '/inc/user-birthday-input.php' );
+    }
+
+    public function uniry_user_profile_update($user_id) {
+        if ( current_user_can( 'edit_user', $user_id ) ) {
+            update_user_meta( $user_id, 'unity_birth_date', sanitize_text_field( $_POST['unity_birth_date'] ) );
+        }
     }
 
     public function event_trigger_schedule() {
