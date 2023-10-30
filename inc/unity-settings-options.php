@@ -3,13 +3,19 @@ register_setting( 'unity_birthday_settings', 'unity_birthday_setting' );
 
 add_settings_section(
 	'unity_birthday_inputs',
-	'Email Settings',
+	__('Email Settings' , 'unity-birthday-email'),
 	'__return_null',
 	'unity_birthday_settings'
 );
 add_settings_section(
 	'unity_birthday_notify_too',
-	'Notification Too',
+	__('Notification Too', 'unity-birthday-email'),
+	'__return_null',
+	'unity_birthday_settings'
+);
+add_settings_section(
+	'unity_birthday_mail_temp',
+	__('Email Template', 'unity-birthday-email'),
 	'__return_null',
 	'unity_birthday_settings'
 );
@@ -59,6 +65,25 @@ add_settings_field(
 );
 
 
+
+add_settings_field(
+	'unity_email_tamp_sub',
+	__('Email Subject', 'unity-birthday-email'),
+	'unity_email_tamp_subject',
+	'unity_birthday_settings',
+	'unity_birthday_mail_temp'
+);
+
+add_settings_field(
+	'unity_email_temp_desc',
+	__('Email Description', 'unity-birthday-email'),
+	'unity_email_temp_description',
+	'unity_birthday_settings',
+	'unity_birthday_mail_temp'
+);
+
+
+
 function unity_set_sending_email_time() {
 	$options = get_option( 'unity_birthday_setting' );
 	if (is_array($options)) {
@@ -72,9 +97,9 @@ function unity_set_sending_email_time() {
 function unity_set_sending_from_name() {
 	$options = get_option( 'unity_birthday_setting' );
 	if (is_array($options)) {
-		$fromName = isset($options['unity_set_from_name']) ? $options['unity_set_from_name'] : 'Test From name';
+		$fromName = isset($options['unity_set_from_name']) ? $options['unity_set_from_name'] : get_bloginfo('name');
 	}else{
-		$fromName = 'Test From name';
+		$fromName = get_bloginfo('name');
 	}
 	echo'<input type="text" name="unity_birthday_setting[unity_set_from_name]" value="'. $fromName .'">';
 }
@@ -82,9 +107,9 @@ function unity_set_sending_from_name() {
 function unity_set_sending_from_email() {
 	$options = get_option( 'unity_birthday_setting' );
 	if (is_array($options)) {
-		$fromEmail = isset($options['unity_set_from_email']) ? $options['unity_set_from_email'] : 'test@test.test';
+		$fromEmail = isset($options['unity_set_from_email']) ? $options['unity_set_from_email'] : get_bloginfo('admin_email');
 	}else{
-		$fromEmail = 'test@test.test';
+		$fromEmail = get_bloginfo('admin_email');
 	}
 	echo'<input type="email" name="unity_birthday_setting[unity_set_from_email]" value="'. $fromEmail .'">';
 }
@@ -95,7 +120,7 @@ function unity_set_notification_too() {
 	if (is_array($options)) {
 		$checked = isset($options['unity_set_notification_too']) ? true : false;
 	} else {
-		$checked = true;
+		$checked = false;
 	}
 
 	echo'<label class="unity_switch">
@@ -107,9 +132,46 @@ function unity_set_notification_too() {
 function unity_set_notify_too_email() {
 	$options = get_option( 'unity_birthday_setting' );
 	if (is_array($options)) {
-		$notify2Email = isset($options['unity_set_notify_too_email']) ? $options['unity_set_notify_too_email'] : 'admin@test.test';
+		$notify2Email = isset($options['unity_set_notify_too_email']) ? $options['unity_set_notify_too_email'] : get_bloginfo('admin_email');
 	}else{
-		$notify2Email = 'admin@test.test';
+		$notify2Email = get_bloginfo('admin_email');
 	}
 	echo'<input type="email" name="unity_birthday_setting[unity_set_notify_too_email]" value="'. $notify2Email .'">';
+}
+
+
+function unity_email_tamp_subject() {
+	$options = get_option( 'unity_birthday_setting' );
+	if (is_array($options)) {
+		$mailSub = isset($options['unity_email_temp_sub']) ? $options['unity_email_temp_sub'] : 'Happy Birthday @username';
+	}else{
+		$mailSub = 'Happy Birthday @firstname@';
+	}
+	echo'<input type="text" name="unity_birthday_setting[unity_email_temp_sub]" value="'. $mailSub .'">';
+}
+
+function unity_email_temp_description() {
+	$options = get_option( 'unity_birthday_setting' );
+	if (is_array($options)) {
+		$mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
+	}else{
+		$mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
+	}
+
+	$editor_id = "unity_email_temp_desc";
+	$editor_name = "unity_birthday_setting[unity_email_temp_desc]";
+	$args = array(
+			'media_buttons' => true,
+			'textarea_name' => $editor_name,
+			'textarea_rows' => get_option('default_post_edit_rows', 30),
+			'quicktags' => true,
+		);
+	wp_editor( $mailDesc, $editor_id, $args );
+
+	echo '<h4>Please Note:</h4><p>"@username@" will be replaced with the user\'s Username whose birthday it is.</p>
+	<p>"@fullname@" will be replaced with the user\'s Full Name whose birthday it is.</p>
+	<p>"@firstname@" will be replaced with the user\'s First Name whose birthday it is.</p>
+	<p>"@nickname@" will be replaced with the user\'s Nick Name whose birthday it is.</p>
+	<p>"@displayname@" will be replaced with the user\'s Display Name whose birthday it is.</p>
+	<p>If the user doesn\'t have a special name, it will be replaced by the Username.</p>';
 }

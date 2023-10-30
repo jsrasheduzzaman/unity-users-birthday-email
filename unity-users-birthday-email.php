@@ -39,7 +39,6 @@ class Unity_Birthday {
 
 
         // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
-        // add_action( 'init', [$this, 'unity_mail_function'] );
     }
 
 
@@ -97,7 +96,7 @@ class Unity_Birthday {
             'meta_query' => array(
                 array(
                     'key' => 'mepr_birth_day',
-                    'value' => $todayDay,
+                    'value' => $todayDay, // 2023-11-13 == 13
                     'compare' => '=',
                     'type' => 'NUMERIC',
                 ),
@@ -105,15 +104,23 @@ class Unity_Birthday {
             'fields' => 'all_with_meta',
         );
 
+        $args = apply_filters( 'unity_users_birth_date_query_arg', $args );
+
         $user_query = new WP_User_Query($args);
        
         if (!empty($user_query->results)) {
             foreach ($user_query->results as $user) {
                 if ($user->exists()) {
+
+
                     if ($user->has_prop('mepr_birth_day')) $birthday = $user->get('mepr_birth_day');
                     else $birthday = '';
                     if ($user->has_prop('mepr_birth_month')) $birthmonth = $user->get('mepr_birth_month');
                     else $birthmonth = '';
+
+                    $birthday = apply_filters( 'unity_users_birth_day', $birthday );
+                    $birthmonth = apply_filters( 'unity_users_birth_month', $birthmonth );
+
 
                     if ($todayDay == $birthday && strtolower($todayMonth) == $birthmonth) {
 
