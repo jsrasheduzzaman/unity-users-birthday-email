@@ -39,6 +39,7 @@ class Unity_Birthday {
 
 
         // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
+        // add_action( 'init',[$this, 'unity_mail_function'] );
     }
 
 
@@ -89,19 +90,18 @@ class Unity_Birthday {
         //     return;
         // }
 
-        $todayDay = date('j');
-        $todayMonth = date('F');
+        $todayDay       = date('j');    // 1-31
+        $todayMonth     = date('m');    // 1-12
+        $getBirthday = apply_filters( 'unity_users_birthday_meta_key', 'unity_birth_date' );
 
         $args = array(
             'meta_query' => array(
                 array(
-                    'key' => 'mepr_birth_day',
-                    'value' => $todayDay, // 2023-11-13 == 13
-                    'compare' => '=',
-                    'type' => 'NUMERIC',
+                    'key' => $getBirthday,
+                    'value' => '-'.$todayMonth.'-'.$todayDay,
+                    'compare' => 'RLIKE',
                 ),
             ),
-            'fields' => 'all_with_meta',
         );
 
         $args = apply_filters( 'unity_users_birth_date_query_arg', $args );
@@ -111,18 +111,22 @@ class Unity_Birthday {
         if (!empty($user_query->results)) {
             foreach ($user_query->results as $user) {
                 if ($user->exists()) {
+                    if ($user->has_prop('unity_birth_date')) $birthdate = $user->get('unity_birth_date');
+                    else $birthdate = '';
+
+                    $birthday = '';
+                    $birthmonth = '';
+                    if (!empty($birthdate)) {
+                        $date = date_create($birthdate);
+                        $birthday = date_format($date,"d");     // 1-31
+                        $birthmonth = date_format($date,"m");   // 1-12
+                    }
+
+                    $birthday = apply_filters( 'unity_users_birth_day', $birthday, $user );
+                    $birthmonth = apply_filters( 'unity_users_birth_month', $birthmonth, $user );
 
 
-                    if ($user->has_prop('mepr_birth_day')) $birthday = $user->get('mepr_birth_day');
-                    else $birthday = '';
-                    if ($user->has_prop('mepr_birth_month')) $birthmonth = $user->get('mepr_birth_month');
-                    else $birthmonth = '';
-
-                    $birthday = apply_filters( 'unity_users_birth_day', $birthday );
-                    $birthmonth = apply_filters( 'unity_users_birth_month', $birthmonth );
-
-
-                    if ($todayDay == $birthday && strtolower($todayMonth) == $birthmonth) {
+                    if ($todayDay == $birthday && $todayMonth == $birthmonth) {
 
                         $username = '';
                         if($user->get('first_name')){
