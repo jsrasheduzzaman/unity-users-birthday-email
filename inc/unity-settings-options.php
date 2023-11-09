@@ -171,6 +171,7 @@ function unity_email_temp_description() {
 	echo '<h4>Please Note:</h4><p>"@username@" will be replaced with the user\'s Username whose birthday it is.</p>
 	<p>"@fullname@" will be replaced with the user\'s Full Name whose birthday it is.</p>
 	<p>"@firstname@" will be replaced with the user\'s First Name whose birthday it is.</p>
+	<p>"@lastname@" will be replaced with the user\'s Last Name whose birthday it is.</p>
 	<p>"@nickname@" will be replaced with the user\'s Nick Name whose birthday it is.</p>
 	<p>"@displayname@" will be replaced with the user\'s Display Name whose birthday it is.</p>
 	<p>If the user doesn\'t have a special name, it will be replaced by the Username.</p>';

@@ -39,7 +39,7 @@ class Unity_Birthday {
 
 
         // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
-        // add_action( 'init',[$this, 'unity_mail_function'] );
+        add_action( 'init',[$this, 'unity_mail_function'] );
     }
 
 
@@ -90,7 +90,7 @@ class Unity_Birthday {
         //     return;
         // }
 
-        $todayDay       = date('j');    // 1-31
+        $todayDay       = date('d');    // 1-31
         $todayMonth     = date('m');    // 1-12
         $getBirthday = apply_filters( 'unity_users_birthday_meta_key', 'unity_birth_date' );
 
@@ -137,24 +137,56 @@ class Unity_Birthday {
                             $username = $user->get('display_name');
                         }
 
+
+                        $userName   = $user->get('user_login');
+                        $fName      = $user->get('first_name') ?? $user->get('user_login');
+                        $lname      = $user->get('last_name') ?? $user->get('user_login');
+                        $niceName   = $user->get('user_nicename') ?? $user->get('user_login');
+                        $dName      = $user->get('display_name') ?? $user->get('user_login');
+                        $fullName   = $user->get('first_name') && $user->get('first_name') ? $fName .' '. $lname : $user->get('user_login');
+
+
+                        $options = get_option( 'unity_birthday_setting' );
+                        if (is_array($options)) {
+                            $sendTime = isset($options['unity_set_email_time']) ? $options['unity_set_email_time'] : 0;
+                            $fromName = isset($options['unity_set_from_name']) ? $options['unity_set_from_name'] : get_bloginfo('name');
+                            $fromEmail = isset($options['unity_set_from_email']) ? $options['unity_set_from_email'] : get_bloginfo('admin_email');
+                            $mailSub = isset($options['unity_email_temp_sub']) ? $options['unity_email_temp_sub'] : 'Happy Birthday @username';
+                            $mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
+                            $checked = isset($options['unity_set_notification_too']) ? true : false;
+                            $notify2Email = isset($options['unity_set_notify_too_email']) ? $options['unity_set_notify_too_email'] : get_bloginfo('admin_email');
+                        }else{
+                            $sendTime = 0;
+                            $fromName = get_bloginfo('name');
+                            $fromEmail = get_bloginfo('admin_email');
+                            $mailSub = 'Happy Birthday @firstname@';
+                            $mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
+                            $checked = false;
+                            $notify2Email = get_bloginfo('admin_email');
+                        }
+
+
+
+
+
                         $to = $user->get('user_email');
-                        $subject = 'Happy Birthday ' . $username . '!';
+                        $subject = $mailSub;
                         $headers = 'MIME-Version: 1.0' . "\r\n";
                         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                        $headers .= 'Brussels Women\'s Club <info@brusselswomens.club>' . "\r\n";
+                        $headers .= $fromName . '<' . $fromEmail . '>' . "\r\n";
                         $message = '
                             <html>
                             <head>
                             <title>Happy Birthday</title>
                             </head>
                             <body>
-                            <p><img src="https://brusselswomens.club/wp-content/uploads/2022/02/BWCBday.jpeg" alt="Happy Birthday"></p>
+                            <div>' . $mailDesc . '</div>
                             </body>
                             </html>
                             ';
-                        if(wp_mail( $to,$subject,$message,$headers )){
-                            wp_mail('khiron141@gmail.com', 'Notification of Birthday Email Sent', 'A birthday email was sent to ' . $username . '.', $headers);
-                        }
+                        // if(wp_mail( $to,$subject,$message,$headers ) && $checked ){
+                        //     wp_mail($notify2Email, 'Notification of Birthday Email Sent', 'A birthday email was sent to ' . $username . '.', $headers);
+                        // }
                     }
                 }
             }
