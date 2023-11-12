@@ -166,7 +166,7 @@ function unity_email_temp_description() {
 			'textarea_rows' => get_option('default_post_edit_rows', 30),
 			'quicktags' => true,
 		);
-	wp_editor( $mailDesc, $editor_id, $args );
+	wp_editor( html_entity_decode($mailDesc), $editor_id, $args );
 
 	echo '<h4>Please Note:</h4><p>"@username@" will be replaced with the user\'s Username whose birthday it is.</p>
 	<p>"@fullname@" will be replaced with the user\'s Full Name whose birthday it is.</p>

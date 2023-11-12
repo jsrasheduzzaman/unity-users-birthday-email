@@ -34,10 +34,9 @@ class Unity_Birthday {
         add_action( 'personal_options_update', [$this, 'uniry_user_profile_update'] );
         add_action( 'edit_user_profile_update', [$this, 'uniry_user_profile_update'] );
         add_action( 'admin_enqueue_scripts', [ $this, 'unity_admin_scripts' ] );
-        add_action( 'wp', [$this, 'event_trigger_schedule'] );
         add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
-        // add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
-        add_action( 'init', [$this, 'unity_mail_function'] );
+        add_action( 'wp', [$this, 'event_trigger_schedule'] );
+        add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
     }
 
 
@@ -91,9 +90,9 @@ class Unity_Birthday {
             $sendTime = 0;
         }
 
-        // if (gmdate('G') !== $sendTime) {
-        //     return;
-        // }
+        if (gmdate('G') !== $sendTime) {
+            return;
+        }
 
         $todayDay       = date('d');    // 1-31
         $todayMonth     = date('m');    // 1-12
@@ -132,7 +131,6 @@ class Unity_Birthday {
 
 
                     if ($todayDay == $birthday && $todayMonth == $birthmonth) {
-
 
                         $userName   = $user->get('user_login');
                         $fName      = $user->get('first_name') ?? $user->get('user_login');
@@ -198,7 +196,7 @@ class Unity_Birthday {
                             <title>Happy Birthday</title>
                             </head>
                             <body>
-                            <div>' . $mailDesc . '</div>
+                            <div>' . html_entity_decode($mailDesc) . '</div>
                             </body>
                             </html>
                             ';
