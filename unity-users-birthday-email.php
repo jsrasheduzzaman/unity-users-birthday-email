@@ -70,8 +70,10 @@ class Unity_Birthday {
     }
 
     public function uniry_user_profile_update($user_id) {
-        if ( current_user_can( 'edit_user', $user_id ) ) {
-            update_user_meta( $user_id, 'unity_birth_date', sanitize_text_field( $_POST['unity_birth_date'] ) );
+        if ( isset( $_REQUEST['unity-birthdate-validity'] ) && wp_verify_nonce( $_REQUEST['unity-birthdate-validity'], 'unity_birthdate_nonce_action' ) && current_user_can( 'edit_user', $user_id ) ) {
+            update_user_meta( $user_id, 'unity-birth-date', sanitize_text_field( $_POST['unity-birth-date'] ) );
+        }else{
+            die( __( 'Security check faild', 'unity-birthday-email' ) );
         }
     }
 
@@ -94,8 +96,8 @@ class Unity_Birthday {
             return;
         }
 
-        $todayDay       = date('d');    // 1-31
-        $todayMonth     = date('m');    // 1-12
+        $todayDay       = gmdate('d');    // 1-31
+        $todayMonth     = gmdate('m');    // 1-12
         $getBirthday = apply_filters( 'unity_users_birthday_meta_key', 'unity_birth_date' );
 
         $args = array(
