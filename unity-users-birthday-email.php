@@ -7,7 +7,7 @@
  * Requires at least: 5.7
  * Requires PHP: 7.2
  * Author: Unity Active Developers
- * Author URI: 
+ * Author URI: https://www.upwork.com/freelancers/~014150adf9a8852a1b
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: unity-birthday-email

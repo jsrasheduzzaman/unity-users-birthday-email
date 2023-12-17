@@ -1,10 +1,10 @@
 === Users Birthday Email ===
 Contributors: jsrasheduzzaman
-Donate link: 
+Donate link: https://www.upwork.com/freelancers/~014150adf9a8852a1b
 Tags: Birthday, User Birthday Email, Birthday Email, Send Birthday Email
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 
+Stable tag: 1.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -52,8 +52,20 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 == Screenshots ==
 
+1. Go to the settings manu and configure it your self.
+
+2. Integrate with other plugins please use our filter hook.
 
 == Changelog ==
 
+Version 1.0
+
+Initial Release
+
 
 == Upgrade Notice ==
+
+Version 1.0
+
+Initial Release
+
