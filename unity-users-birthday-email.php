@@ -3,14 +3,14 @@
  * Plugin Name: Users Birthday Email
  * Plugin URI: 
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0
- * Requires at least: 5.7
+ * Version: 1.0.0
+ * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Unity Active Developers
  * Author URI: https://www.upwork.com/freelancers/~014150adf9a8852a1b
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: unity-birthday-email
+ * Text Domain: unity-users-birthday-email
  * Domain Path: /languages
  */
 
@@ -20,6 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define('UNITY_PATH', plugin_dir_path(__FILE__));
 
+require_once( UNITY_PATH . '/inc/unity-settings.php' );
+require_once( UNITY_PATH . '/inc/unity-settings-options.php' );
+require_once( UNITY_PATH . '/inc/user-birthday-input.php' );
+
 
 class Unity_Birthday {
 
@@ -27,18 +31,12 @@ class Unity_Birthday {
 
     protected function __construct() {
         add_action( 'plugins_loaded', [$this, 'unity_load_textdomain'] );
-        add_action( 'admin_menu', [$this, 'unity_sub_menu_page'] );
-        add_action( 'admin_init', [$this, 'unity_settings_options'] );
-        add_action( 'show_user_profile', [$this, 'unity_user_birthday_input'] );
-        add_action( 'edit_user_profile', [$this, 'unity_user_birthday_input'] );
-        add_action( 'personal_options_update', [$this, 'uniry_user_profile_update'] );
-        add_action( 'edit_user_profile_update', [$this, 'uniry_user_profile_update'] );
+        
         add_action( 'admin_enqueue_scripts', [ $this, 'unity_admin_scripts' ] );
         add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
         add_action( 'wp', [$this, 'event_trigger_schedule'] );
         add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
     }
-
 
     public function unity_admin_scripts($hook) {
         if( "users_page_unity-users-birthday-emails" != $hook ) {
@@ -47,34 +45,13 @@ class Unity_Birthday {
         wp_enqueue_style( 'unity-admin-style', plugin_dir_url(__FILE__) . 'assets/css/admin-style.css', [], '1.0.0' );
     }
 
-
     public function unity_load_textdomain() {
-        load_plugin_textdomain( 'unity-birthday-email', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-    }
-
-    public function unity_sub_menu_page() {
-        require_once( UNITY_PATH . '/inc/unity-settings.php' );
-    }
-
-    public function unity_settings_options() {
-        require_once( UNITY_PATH . '/inc/unity-settings-options.php' );
+        load_plugin_textdomain( 'unity-users-birthday-email', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
     }
 
     public function plugin_action_links($actions){
-        $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">' . __('Settings', 'unity-birthday-email') . '</a>';
+        $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">' . __('Settings', 'unity-users-birthday-email') . '</a>';
         return $actions;
-    }
-
-    public function unity_user_birthday_input($user) {
-        require_once( UNITY_PATH . '/inc/user-birthday-input.php' );
-    }
-
-    public function uniry_user_profile_update($user_id) {
-        if ( isset( $_REQUEST['unity-birthdate-validity'] ) && wp_verify_nonce( $_REQUEST['unity-birthdate-validity'], 'unity_birthdate_nonce_action' ) && current_user_can( 'edit_user', $user_id ) ) {
-            update_user_meta( $user_id, 'unity-birth-date', sanitize_text_field( $_POST['unity-birth-date'] ) );
-        }else{
-            die( __( 'Security check faild', 'unity-birthday-email' ) );
-        }
     }
 
     public function event_trigger_schedule() {
@@ -147,7 +124,7 @@ class Unity_Birthday {
                             $fromName = isset($options['unity_set_from_name']) ? $options['unity_set_from_name'] : get_bloginfo('name');
                             $fromEmail = isset($options['unity_set_from_email']) ? $options['unity_set_from_email'] : get_bloginfo('admin_email');
                             $mailSub = isset($options['unity_email_temp_sub']) ? $options['unity_email_temp_sub'] : 'Happy Birthday @username';
-                            $mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'unity-users-birthday-email/images/unity-birthday-email.jpg">';
+                            $mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'unity-users-birthday-email/images/unity-users-birthday-email.jpg">';
                             $checked = isset($options['unity_set_notification_too']) ? true : false;
                             $notify2Email = isset($options['unity_set_notify_too_email']) ? $options['unity_set_notify_too_email'] : get_bloginfo('admin_email');
                         }else{
@@ -155,7 +132,7 @@ class Unity_Birthday {
                             $fromName = get_bloginfo('name');
                             $fromEmail = get_bloginfo('admin_email');
                             $mailSub = 'Happy Birthday @firstname@';
-                            $mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'unity-users-birthday-email/images/unity-birthday-email.jpg">';
+                            $mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'unity-users-birthday-email/images/unity-users-birthday-email.jpg">';
                             $checked = false;
                             $notify2Email = get_bloginfo('admin_email');
                         }
@@ -213,7 +190,6 @@ class Unity_Birthday {
         }
     }
 
-
     public static function getInstance() {
         $subclass = static::class;
         if (!isset(self::$instances[$subclass])) {
@@ -223,4 +199,9 @@ class Unity_Birthday {
     }
 }
 
+
+// Load Plugin
+Unity_Birthday_SettingsPage::getInstance();
+Unity_Birthday_Input::getInstance();
+Unity_Birthday_SettingsOption::getInstance();
 Unity_Birthday::getInstance();
