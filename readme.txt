@@ -54,8 +54,6 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 1. Go to the settings manu and configure it your self.
 
-2. Integrate with other plugins please use our filter hook.
-
 
 == Changelog ==
 
