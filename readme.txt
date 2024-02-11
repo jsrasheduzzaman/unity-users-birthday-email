@@ -58,11 +58,6 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 == Changelog ==
 
-
-= 1.0.1 - 10/02/2024 =
-
-- Add image
-
 Version 1.0
 
 Initial Release
