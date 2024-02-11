@@ -3,7 +3,7 @@
  * Plugin Name: Users Birthday Email
  * Plugin URI: 
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Unity Active Developers
