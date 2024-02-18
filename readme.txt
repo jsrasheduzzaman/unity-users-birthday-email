@@ -4,7 +4,7 @@ Donate link: https://www.upwork.com/freelancers/~014150adf9a8852a1b
 Tags: Birthday, User Birthday Email, Birthday Email, Send Birthday Email
 Requires at least: 5.5.1
 Tested up to: 6.4.3
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -56,6 +56,11 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 
 == Changelog ==
+
+= 1.0.3 - 2024-02-18 =
+
+- Fixed: Missing placeholder image
+
 
 = 1.0.2 - 2024-02-18 =
 

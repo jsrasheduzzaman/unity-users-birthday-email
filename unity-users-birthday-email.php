@@ -3,7 +3,7 @@
  * Plugin Name: Users Birthday Email
  * Plugin URI: 
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Unity Active Developers
@@ -124,7 +124,7 @@ class Unity_Birthday {
                             $fromName = isset($options['unity_set_from_name']) ? $options['unity_set_from_name'] : get_bloginfo('name');
                             $fromEmail = isset($options['unity_set_from_email']) ? $options['unity_set_from_email'] : get_bloginfo('admin_email');
                             $mailSub = isset($options['unity_email_temp_sub']) ? $options['unity_email_temp_sub'] : 'Happy Birthday @username';
-                            $mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="//raw.githubusercontent.com/jsrasheduzzaman/unity-users-birthday-email/main/images/unity-birthday-email.jpg">';
+                            $mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
                             $checked = isset($options['unity_set_notification_too']) ? true : false;
                             $notify2Email = isset($options['unity_set_notify_too_email']) ? $options['unity_set_notify_too_email'] : get_bloginfo('admin_email');
                         }else{
@@ -132,7 +132,7 @@ class Unity_Birthday {
                             $fromName = get_bloginfo('name');
                             $fromEmail = get_bloginfo('admin_email');
                             $mailSub = 'Happy Birthday @firstname@';
-                            $mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="//raw.githubusercontent.com/jsrasheduzzaman/unity-users-birthday-email/main/images/unity-birthday-email.jpg">';
+                            $mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
                             $checked = false;
                             $notify2Email = get_bloginfo('admin_email');
                         }

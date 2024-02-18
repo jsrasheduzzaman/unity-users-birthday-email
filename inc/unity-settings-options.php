@@ -162,9 +162,9 @@ class Unity_Birthday_SettingsOption {
 	public function unity_email_temp_description() {
 		$options = get_option( 'unity_birthday_setting' );
 		if (is_array($options)) {
-			$mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-users-birthday-email.jpg">';
+			$mailDesc = isset($options['unity_email_temp_desc']) ? $options['unity_email_temp_desc'] : '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
 		}else{
-			$mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-users-birthday-email.jpg">';
+			$mailDesc = '<h2>Happy Birthday @firstname@</h2> <img src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'images/unity-birthday-email.jpg">';
 		}
 
 		$editor_id = "unity_email_temp_desc";
