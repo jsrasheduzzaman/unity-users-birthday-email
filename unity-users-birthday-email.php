@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: Users Birthday Email
- * Plugin URI: 
+ * Plugin URI: //webfydev.com/users-birthday-email.html
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
- * Author: Unity Active Developers
- * Author URI: https://www.upwork.com/freelancers/~014150adf9a8852a1b
+ * Author: Webfydev
+ * Author URI: //webfydev.com
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: unity-users-birthday-email
@@ -31,7 +31,6 @@ class Unity_Birthday {
 
     protected function __construct() {
         add_action( 'plugins_loaded', [$this, 'unity_load_textdomain'] );
-        
         add_action( 'admin_enqueue_scripts', [ $this, 'unity_admin_scripts' ] );
         add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
         add_action( 'wp', [$this, 'event_trigger_schedule'] );
@@ -87,7 +86,7 @@ class Unity_Birthday {
             ),
         );
 
-        $args = apply_filters( 'unity_users_birth_date_query_arg', $args );
+        $args = apply_filters( 'unity_users_birth_date_query_args', $args );
 
         $user_query = new WP_User_Query($args);
        
@@ -105,8 +104,8 @@ class Unity_Birthday {
                         $birthmonth = date_format($date,"m");   // 1-12
                     }
 
-                    $birthday = apply_filters( 'unity_users_birth_day', $birthday, $user );
-                    $birthmonth = apply_filters( 'unity_users_birth_month', $birthmonth, $user );
+                    $birthday = apply_filters( 'unity_users_birth_day_format', $birthday, $user );
+                    $birthmonth = apply_filters( 'unity_users_birth_month_format', $birthmonth, $user );
 
 
                     if ($todayDay == $birthday && $todayMonth == $birthmonth) {

@@ -1,10 +1,10 @@
 === Users Birthday Email ===
 Contributors: jsrasheduzzaman
-Donate link: https://www.upwork.com/freelancers/~014150adf9a8852a1b
-Tags: Birthday, User Birthday Email, Birthday Email, Send Birthday Email
+Donate link: //webfydev.com
+Tags: Birthday, User Birthday Email, Birthday Email, Send Birthday Email, Birth Day Email
 Requires at least: 5.5.1
-Tested up to: 6.4.3
-Stable tag: 1.0.3
+Tested up to: 6.5.2
+Stable tag: 1.0.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,8 @@ This is very easy to use and user friendly interface for non technical person.
 It provides a date-picker to collect the user's birthday data. Also you can integrate it with any kind of membership plugin.
 
 Users Birthday Email plugin gives you many filter hooks so that you can modify it easily.
+
+
 
 == Installation ==
 
@@ -54,8 +56,17 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 1. Go to the settings manu and configure it your self.
 
+2. Go to the back-end user profile and edit it your self.
+
+3. Add shortcode birthdate_form to appear the input form anywhere.
+
 
 == Changelog ==
+
+= 1.0.4 - 2024-04-22 =
+
+- Fixed: Shortcode field added & hooks modified
+
 
 = 1.0.3 - 2024-02-18 =
 
