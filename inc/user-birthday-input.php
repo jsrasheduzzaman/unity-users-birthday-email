@@ -44,14 +44,18 @@ class Unity_Birthday_Input {
         $user = wp_get_current_user();
         if ( isset( $_REQUEST['unity-birthdate-validate'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['unity-birthdate-validate'] ) ), 'unity_birthdate_nonce_shortcode' ) && is_user_logged_in() ) {
             update_user_meta( $user->ID, 'unity-birth-date', sanitize_text_field( $_REQUEST['unity-birth-date'] ) );
+        }else{
+	    if(isset( $_REQUEST['unity-birthdate-validate'] ) && !is_user_logged_in() ){
+            	die( __( 'You need to login first', 'unity-users-birthday-email' ) );
+	    }
         }
     }
    
     public function uniry_user_profile_update($user_id) {
-        if ( isset( $_REQUEST['unity-birthdate-validity'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['unity-birthdate-validity'] ) ), 'unity_birthdate_nonce_shortcode' ) && current_user_can( 'edit_user', $user_id ) ) {
+        if ( isset( $_REQUEST['unity-birthdate-validity'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['unity-birthdate-validity'] ) ), 'unity_birthdate_nonce_action' ) && current_user_can( 'edit_user', $user_id ) ) {
             update_user_meta( $user_id, 'unity-birth-date', sanitize_text_field( $_POST['unity-birth-date'] ) );
         }else{
-            die( __( 'Security check faild', 'unity-users-birthday-email' ) );
+            die( __( 'Security check failed', 'unity-users-birthday-email' ) );
         }
     }
 
