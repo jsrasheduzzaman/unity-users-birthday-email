@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Users Birthday Email
- * Plugin URI: //webfydev.com/our-plugins/users-birthday-email.html
+ * Plugin URI: //webfydev.com/products/plugins/users-birthday-email
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Webfydev
@@ -50,7 +50,7 @@ class Unity_Birthday {
 
     public function plugin_action_links($actions){
         $actions[] = '<a href="'. esc_url( get_admin_url(null, 'users.php?page=unity-users-birthday-emails') ) .'">' . __('Settings', 'unity-users-birthday-email') . '</a>';
-        $actions[] = '<a href="//webfydev.com/our-plugins/users-birthday-email.html">' . __('Docs', 'unity-users-birthday-email') . '</a>';
+        $actions[] = '<a href="//webfydev.com/products/plugins/users-birthday-email">' . __('Docs', 'unity-users-birthday-email') . '</a>';
         return $actions;
     }
 
@@ -75,7 +75,7 @@ class Unity_Birthday {
 
         $todayDay       = gmdate('d');    // 1-31
         $todayMonth     = gmdate('m');    // 1-12
-        $getBirthday = apply_filters( 'unity_users_birthday_meta_key', 'unity_birth_date' );
+        $getBirthday = apply_filters( 'unity_users_birthday_meta_key', 'unity-birth-date' );
 
         $args = array(
             'meta_query' => array(
@@ -90,11 +90,10 @@ class Unity_Birthday {
         $args = apply_filters( 'unity_users_birth_date_query_args', $args );
 
         $user_query = new WP_User_Query($args);
-       
         if (!empty($user_query->results)) {
             foreach ($user_query->results as $user) {
                 if ($user->exists()) {
-                    if ($user->has_prop('unity_birth_date')) $birthdate = $user->get('unity_birth_date');
+                    if ($user->has_prop('unity-birth-date')) $birthdate = $user->get('unity-birth-date');
                     else $birthdate = '';
 
                     $birthday = '';
