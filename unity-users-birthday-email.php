@@ -3,7 +3,7 @@
  * Plugin Name: Users Birthday Email
  * Plugin URI: //webfydev.com/products/plugins/users-birthday-email
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.7
+ * Version: 1.0.7.1
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Webfydev
@@ -168,13 +168,15 @@ class Unity_Birthday {
                         $headers = 'MIME-Version: 1.0' . "\r\n";
                         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
                         $headers .= $fromName . '<' . $fromEmail . '>' . "\r\n";
+                        $headStyle = apply_filters('unity_users_birth_day_email_head_style', '');
                         $message = '
                             <html>
                             <head>
                             <title>Happy Birthday</title>
+                            ' . (!empty($headStyle) ? '<style>' . $headStyle . '</style>' : '') . '
                             </head>
-                            <body>
-                            <div>' . html_entity_decode($mailDesc) . '</div>
+                            <body class="unity-birthday-email-body">
+                            <div class="unity-birthday-email-content">' . html_entity_decode($mailDesc) . '</div>
                             </body>
                             </html>
                             ';

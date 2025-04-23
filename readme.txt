@@ -1,10 +1,10 @@
 === Users Birthday Email ===
-Contributors: webfydev, jsrasheduzzaman, zakir021063008, wpdelower, kamrulislam0093, riadmahmud46, iqbal511138, nurulanam, wpmahade
+Contributors: webfydev, jsrasheduzzaman
 Donate link: //webfydev.com
 Tags: Birthday, User Birthday Email, Birthday Email, Send Birthday Email, Birth Day Email
 Requires at least: 5.5.1
-Tested up to: 6.7.1
-Stable tag: 1.0.7
+Tested up to: 6.8
+Stable tag: 1.0.7.1
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -62,6 +62,10 @@ Yes, it can work with any membership plugin data. Because this plugin has many f
 
 
 == Changelog ==
+
+= 1.0.7.1 - 2025-04-23 =
+
+- Fixed: New filter hook added unity_users_birth_day_email_head_style for custom styles
 
 = 1.0.7 - 2025-01-02 =
 
