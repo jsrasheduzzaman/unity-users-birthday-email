@@ -3,7 +3,7 @@
  * Plugin Name: Users Birthday Email
  * Plugin URI: //webfydev.com/products/plugins/users-birthday-email
  * Description: Users Birthday Email automatically send an email to WordPress users on their birthday. This is very easy to use with any membership plugins.
- * Version: 1.0.7.1
+ * Version: 1.0.7.2
  * Requires at least: 5.5.1
  * Requires PHP: 7.2
  * Author: Webfydev
@@ -35,6 +35,7 @@ class Unity_Birthday {
         add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), [$this, 'plugin_action_links'] );
         add_action( 'wp', [$this, 'event_trigger_schedule'] );
         add_action( 'unity_daily_event', [$this, 'unity_mail_function'] );
+        add_action( 'admin_notices', [ $this, 'unity_cron_requirement_notice' ] );
     }
 
     public function unity_admin_scripts($hook) {
@@ -54,6 +55,24 @@ class Unity_Birthday {
         return $actions;
     }
 
+    public function unity_cron_requirement_notice() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+            ?>
+            <div class="notice notice-warning">
+                <p>
+                    <strong>Users Birthday Email:</strong>
+                    WordPress Cron is disabled (DISABLE_WP_CRON = true).
+                    Birthday emails will only work if your hosting server has a real cron job configured to run wp-cron.php regularly.
+                </p>
+            </div>
+            <?php
+        }
+    }
+
     public function event_trigger_schedule() {
         if ( ! wp_next_scheduled( 'unity_daily_event' ) ) {
             wp_schedule_event( time(), 'hourly', 'unity_daily_event' );
@@ -69,7 +88,7 @@ class Unity_Birthday {
             $sendTime = 0;
         }
 
-        if (gmdate('G') !== $sendTime) {
+        if ((int) gmdate('G') !== (int) $sendTime) {
             return;
         }
 
@@ -165,9 +184,10 @@ class Unity_Birthday {
 
                         $to = $user->get('user_email');
                         $subject = $mailSub;
-                        $headers = 'MIME-Version: 1.0' . "\r\n";
-                        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                        $headers .= $fromName . '<' . $fromEmail . '>' . "\r\n";
+                        $headers = [];
+                        $headers[] = 'MIME-Version: 1.0';
+                        $headers[] = 'Content-Type: text/html; charset=UTF-8';
+                        $headers[] = 'From: ' . $fromName . ' <' . $fromEmail . '>';
                         $headStyle = apply_filters('unity_users_birth_day_email_head_style', '');
                         $message = '
                             <html>
