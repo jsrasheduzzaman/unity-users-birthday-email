@@ -4,7 +4,7 @@ Donate link: //webfydev.com
 Tags: birthday, user birthday email, birthday email, send birthday email, birth day email
 Requires at least: 5.5.1
 Tested up to: 7.0.1
-Stable tag: 1.0.7.2
+Stable tag: 1.0.7.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -76,77 +76,33 @@ If the issue persists, install and configure the plugin on a fresh WordPress ins
 
 == Developer Hooks ==
 
-The plugin provides several filter hooks for developers to customize its behavior and integrate with third-party membership plugins.
+The plugin provides several filter hooks that allow developers to customize functionality and integrate with third-party membership plugins.
 
 = unity_users_birthday_meta_key =
 
-Change the user meta key used to retrieve birthdays.
-
-Example:
-
-```
-add_filter( 'unity_users_birthday_meta_key', function () {
-    return 'birth_date';
-} );
-```
+Change the user meta key used to store and retrieve user birthday data.
 
 = unity_users_birth_date_query_args =
 
-Modify the user query before birthday emails are processed.
-
-Example:
-
-```
-add_filter( 'unity_users_birth_date_query_args', function ( $args ) {
-    $args['role'] = 'subscriber';
-    return $args;
-} );
-```
+Modify the user query arguments before searching for users with matching birthdays.
 
 = unity_users_birth_day_format =
 
-Modify the birthday day value before comparison.
-
-Example:
-
-```
-add_filter( 'unity_users_birth_day_format', function ( $day ) {
-    return sprintf( '%02d', $day );
-} );
-```
+Customize the birthday day format before comparing it with the current date.
 
 = unity_users_birth_month_format =
 
-Modify the birthday month value before comparison.
-
-Example:
-
-```
-add_filter( 'unity_users_birth_month_format', function ( $month ) {
-    return sprintf( '%02d', $month );
-} );
-```
+Customize the birthday month format before comparing it with the current date.
 
 = unity_users_birth_day_email_head_style =
 
-Add custom CSS to the birthday email.
-
-Example:
-
-```
-add_filter( 'unity_users_birth_day_email_head_style', function ( $css ) {
-
-    $css .= '
-        .unity-birthday-email-body {
-            background: #f5f5f5;
-        }
-    ';
-
-    return $css;
-} );
-```
+Add or modify custom CSS styles inside the birthday email header.
 
 == Changelog ==
+
+= 1.0.7.3 - 2026-07-15 =
+
+* Fixed: Readme file visibility issue
 
 = 1.0.7.2 - 2026-07-15 =
 
