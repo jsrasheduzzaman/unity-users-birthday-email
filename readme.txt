@@ -109,7 +109,7 @@ Filter CSS added inside the birthday email's `<head>` element.
 
 == Changelog ==
 
-= 1.0.8.0 - 2026-09-27 =
+= 1.0.8.0 - 2026-09-28 =
 
 * Added an administrator control to enable or disable birthday email sending.
 * Added today's birthday list with individual and bulk manual sending.
