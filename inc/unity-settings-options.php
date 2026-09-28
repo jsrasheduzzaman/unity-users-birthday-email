@@ -30,6 +30,21 @@ class Unity_Birthday_SettingsOption {
 		);
 
 
+		add_settings_field(
+			'unity_next_scheduled_run',
+			__('Next Scheduled Run (UTC)', 'unity-users-birthday-email'),
+			[ $this, 'unity_next_scheduled_run' ],
+			'unity_birthday_settings',
+			'unity_birthday_inputs'
+		);
+
+		add_settings_field(
+			'unity_enable_birthday_email',
+			__('Enable Birthday Email Notification', 'unity-users-birthday-email'),
+			[ $this, 'unity_set_birthday_email_enabled' ],
+			'unity_birthday_settings',
+			'unity_birthday_inputs'
+		);
 
 		add_settings_field(
 			'unity_sending_email_time',
@@ -101,6 +116,25 @@ class Unity_Birthday_SettingsOption {
 			$sendTime = 0;
 		}
 		echo'<input type="number" name="unity_birthday_setting[unity_set_email_time]" value="'. esc_attr( $sendTime ) .'" min="0" max="23" step="1">';
+	}
+
+	public function unity_set_birthday_email_enabled() {
+		$options = get_option( 'unity_birthday_setting' );
+		$enabled = ! is_array( $options ) || ! array_key_exists( 'unity_enable_birthday_email', $options ) || '1' === (string) $options['unity_enable_birthday_email'];
+
+		echo '<input type="hidden" name="unity_birthday_setting[unity_enable_birthday_email]" value="0">';
+		echo '<label class="unity_switch">
+		  <input class="unity_input" type="checkbox" name="unity_birthday_setting[unity_enable_birthday_email]" value="1" ' . checked( $enabled, true, false ) . '>
+		  <span class="unity_toggle"></span>
+		</label>';
+	}
+
+	public function unity_next_scheduled_run() {
+		$next_scheduled = wp_next_scheduled( 'unity_daily_event' );
+
+		if ( $next_scheduled ) {
+			echo '<p>' . esc_html( gmdate( 'Y-m-d h:i:s A', $next_scheduled ) . ' UTC' ) . '</p>';
+		}
 	}
 
 	public function unity_set_sending_from_name() {

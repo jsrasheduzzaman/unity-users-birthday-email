@@ -3,144 +3,161 @@ Contributors: webfydev, jsrasheduzzaman
 Donate link: //webfydev.com
 Tags: birthday, user birthday email, birthday email, send birthday email, birth day email
 Requires at least: 5.5.1
-Tested up to: 7.0.1
-Stable tag: 1.0.7.3
+Tested up to: 7.1
+Stable tag: 1.0.8.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-**Users Birthday Email** automatically sends personalized birthday emails to your WordPress users on their birthday.
+Users Birthday Email sends personalized birthday messages to WordPress users. Administrators can review users whose birthdays are today or tomorrow, send an email immediately to selected users celebrating today, and configure the automatic email schedule and message template.
 
-The plugin is designed to be simple, lightweight, and easy to configure, making it suitable for both technical and non-technical users.
+The plugin includes a birthday date field on user profiles and can also integrate with membership plugins or custom user data through developer filters.
 
-### Features
+== Features ==
 
-* Automatically sends birthday emails to WordPress users.
-* Built-in date picker for collecting users' birthdays.
-* Works independently without requiring a membership plugin.
-* Easily integrates with third-party membership plugins using filter hooks.
-* Multiple filter hooks for developers to customize functionality.
-* User-friendly settings page with straightforward configuration.
-
-For a better understanding of the plugin setup and features, please review the screenshots before configuring the plugin.
+* Automatically send birthday emails using a customizable HTML message and subject.
+* Enable or disable birthday email sending from the settings page.
+* Review today's birthday users and send to one or multiple selected users immediately.
+* Review tomorrow's birthday users in a separate list.
+* Preview the next scheduled WordPress cron run in UTC.
+* Configure the UTC hour when automatic birthday emails are sent.
+* Optionally send an administrator notification when a birthday email is delivered.
+* Add or update birthdays on WordPress user profiles, or display the birthday form using the `[birthdate_form]` shortcode.
+* Integrate with other plugins using the available developer filters.
 
 == Installation ==
 
-### Modern Installation
+1. Upload the plugin folder to `/wp-content/plugins/`, or install the plugin from **Plugins > Add New Plugin**.
+2. Activate **Users Birthday Email** from the WordPress Plugins screen.
+3. Open **Users > Birthday Emails Settings** to configure automatic sending and the email template.
+4. Add birthdays to user profiles, or integrate an existing birthday field using the developer filters.
 
-1. Go to **WordPress Dashboard → Plugins → Add New Plugin**.
-2. Search for **Users Birthday Email**.
-3. Click **Install Now**.
-4. Activate the plugin.
+== Settings and Usage ==
 
-### Manual Installation
+Open **Users > Birthday Emails Settings** to manage birthday email delivery.
 
-1. Upload the plugin folder to the `/wp-content/plugins/` directory.
-2. Go to **Plugins** in your WordPress dashboard.
-3. Activate **Users Birthday Email**.
+* **Next Scheduled Run (UTC):** Displays the next run of the plugin's hourly WordPress cron event when it is scheduled. This is the next cron check, not necessarily the email delivery time.
+* **Enable Birthday Email Notification:** Controls both automatic and administrator-triggered birthday emails. Existing installations remain enabled unless this option is turned off.
+* **When to Start Sending Emails:** Select the UTC hour during which the hourly cron event sends birthday emails. WP-Cron depends on site traffic unless a server cron job is configured to run `wp-cron.php`.
+* **From Name and From Email:** Set the sender shown on birthday emails.
+* **Send Notification Too:** Optionally send a separate notification to the configured notification email address after a birthday message is sent successfully.
+* **Email Subject and Email Description:** Configure the subject and HTML message. The template supports `@username@`, `@fullname@`, `@firstname@`, `@lastname@`, `@nickname@`, and `@displayname@` placeholders.
+
+The **Birthdays Today** table lists matching users and provides individual checkboxes plus a select-all checkbox. Choose one or more users and click **Send Instant Birthday Emails** to send immediately. The **Birthdays Tomorrow** table is a preview list and does not send emails.
 
 == Frequently Asked Questions ==
 
-= Does this work without a membership plugin? =
+= Does the plugin require a membership plugin? =
 
-Yes. The plugin does not require any membership plugin. It includes a built-in date picker that allows users to save their birthday directly.
+No. The plugin adds a birthday field to WordPress user profiles and can be used independently.
 
-= Can this plugin work with any membership plugin? =
+= Can I use birthday data stored by another plugin? =
 
-Yes. The plugin provides several filter hooks that allow developers to integrate birthday data from virtually any membership plugin.
+Yes. Use the `unity_users_birthday_meta_key` and `unity_users_birth_date_query_args` filters to connect a different user meta key or customize the query.
 
-= Birthday emails are not being sent on time or are not being sent at all. What should I do? =
+= What time zone is used for automatic sending? =
+
+The configured sending hour and birthday date matching use UTC. The next scheduled run preview also displays UTC. WordPress cron runs hourly and checks whether the configured UTC sending hour has arrived.
+
+= What if birthday emails are not sent? =
 
 Before troubleshooting, please review the plugin screenshots and ensure the plugin has been configured correctly.
 
-If the plugin is configured correctly but birthday emails are still not being sent, follow these steps:
+* Confirm that birthday email sending is enabled, the user's birth date is saved, and the configured UTC sending hour has passed.
+* Then check that WordPress cron is running and that the site can send mail.
+* An SMTP plugin can help diagnose mail delivery. If `DISABLE_WP_CRON` is enabled, configure a real server cron job to request `wp-cron.php` regularly; dismissing the admin notice does not enable cron.
 
-* Verify that WP-Cron is running correctly.
-* Ensure your website can send emails successfully (using an SMTP plugin is recommended).
-* Check your server and PHP error logs for any errors.
-* Confirm that scheduled WordPress cron events are executing as expected.
-* Temporarily disable other plugins to check for conflicts.
-
-If the issue persists, install and configure the plugin on a fresh WordPress installation with the default theme and no additional plugins.
+If the issue persists, temporarily disable other plugins to check for conflicts. For further check, install and configure the plugin on a fresh WordPress installation with the default theme and no additional plugins.
 
 * If the plugin works correctly on the fresh installation, the issue is likely caused by your current website environment, another plugin, your theme, or your server configuration. In this case, we recommend creating a staging environment and debugging your website to identify the conflict.
 * If the plugin still does not work on the fresh WordPress installation after it has been configured correctly, please open a support ticket and include details about your WordPress version, PHP version, and the steps you followed. This will help us investigate the issue more efficiently.
 
+= Can I send birthday emails manually? =
+
+Yes. On the settings page, select one or more users listed under **Birthdays Today** and click **Send Instant Birthday Emails**. Manually sending is also blocked when birthday email sending is disabled.
+
 == Screenshots ==
 
-1. Configure the plugin from the Settings page.
-2. Enter or update a user's birthday from the WordPress user profile.
-3. Use the `[birthdate_form]` shortcode to display the birthday input field anywhere on your website.
+1. Birthday email settings, schedule preview.
+2. Macros, Today's and tomorrow's birthday lists with bulk emails sender.
+3. Add or update a user's birthday from their WordPress profile.
+4. Use the `[birthdate_form]` shortcode to display a birthday field on the site.
 
 == Developer Hooks ==
 
-The plugin provides several filter hooks that allow developers to customize functionality and integrate with third-party membership plugins.
+= `unity_users_birthday_meta_key` =
 
-= unity_users_birthday_meta_key =
+Filter the user meta key used to store and retrieve birthday dates. Defaults to `unity-birth-date`.
 
-Change the user meta key used to store and retrieve user birthday data.
+= `unity_users_birth_date_query_args` =
 
-= unity_users_birth_date_query_args =
+Filter the `WP_User_Query` arguments used to find users with a birthday matching the target day and month.
 
-Modify the user query arguments before searching for users with matching birthdays.
+= `unity_users_birth_day_format` =
 
-= unity_users_birth_day_format =
+Filter the birthday day value before it is compared with the target day.
 
-Customize the birthday day format before comparing it with the current date.
+= `unity_users_birth_month_format` =
 
-= unity_users_birth_month_format =
+Filter the birthday month value before it is compared with the target month.
 
-Customize the birthday month format before comparing it with the current date.
+= `unity_users_birth_day_email_head_style` =
 
-= unity_users_birth_day_email_head_style =
-
-Add or modify custom CSS styles inside the birthday email header.
+Filter CSS added inside the birthday email's `<head>` element.
 
 == Changelog ==
 
+= 1.0.8.0 - 2026-09-27 =
+
+* Added an administrator control to enable or disable birthday email sending.
+* Added today's birthday list with individual and bulk manual sending.
+* Added a list of users whose birthdays are tomorrow.
+* Added a preview of the next scheduled cron run in UTC.
+* Improved cron warning visibility and dismissal behavior.
+
 = 1.0.7.3 - 2026-07-15 =
 
-* Fixed: Readme file visibility issue
+* Fixed readme file visibility issue.
 
 = 1.0.7.2 - 2026-07-15 =
 
-* Fixed: Improved WP-Cron scheduling reliability for daily birthday email execution.
-* Fixed: Added additional safety checks for email sending time comparison.
+* Improved WP-Cron scheduling reliability for daily birthday email execution.
+* Added safety checks for email sending time comparison.
 
 = 1.0.7.1 - 2025-04-23 =
 
-* Added: `unity_users_birth_day_email_head_style` filter hook for customizing email header styles.
+* Added the `unity_users_birth_day_email_head_style` filter hook.
 
 = 1.0.7 - 2025-01-02 =
 
-* Fixed: Birthday emails not sending in certain cases.
+* Fixed birthday emails not sending in certain cases.
 
 = 1.0.6 - 2024-05-22 =
 
-* Fixed: User birthday meta update issue.
+* Fixed user birth date meta update issue.
 
 = 1.0.5 - 2024-04-22 =
 
-* Added: Documentation URL.
+* Added documentation URL.
 
 = 1.0.4 - 2024-04-22 =
 
-* Added: Birthday form shortcode.
-* Improved: Hooks and extensibility.
+* Added birthday form shortcode.
+* Improved hooks and extensibility.
 
 = 1.0.3 - 2024-02-18 =
 
-* Fixed: Missing placeholder image.
+* Fixed missing placeholder image.
 
 = 1.0.2 - 2024-02-18 =
 
-* Added: Plugin images and placeholder image.
+* Added plugin images and placeholder image.
 
 = 1.0.1 - 2024-02-11 =
 
-* Fixed: Missing placeholder image.
+* Fixed missing placeholder image.
 
 = 1.0.0 - 2024-02-09 =
 
@@ -148,6 +165,6 @@ Add or modify custom CSS styles inside the birthday email header.
 
 == Upgrade Notice ==
 
-= 1.0.7.2 =
+= 1.0.8.0 =
 
-Update to improve WP-Cron reliability and ensure birthday emails are processed more consistently.
+Review the new birthday lists and email controls under **Users > Birthday Emails Settings**. Automatic sending requires WordPress cron to run, and the configured delivery hour is in UTC.
