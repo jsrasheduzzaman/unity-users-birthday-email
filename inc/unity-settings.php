@@ -10,7 +10,7 @@ class Unity_Birthday_SettingsPage {
     public function unity_user_menu_page() { 
     	add_submenu_page(
 		    'users.php',
-		    __( 'Unity Users Birthday Email Settings', 'unity-users-birthday-email' ),
+		    __( 'Users Birthday Email Settings', 'unity-users-birthday-email' ),
 		    __( 'Birthday Emails Settings', 'unity-users-birthday-email' ),
 		    'manage_options',
 		    'unity-users-birthday-emails',
